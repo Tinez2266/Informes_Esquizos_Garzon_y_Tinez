@@ -1,0 +1,51 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "LaTeX: Build Plantilla (latexmk)",
+      "type": "shell",
+      "command": "latexmk",
+      "args": [
+        "-pdf",
+        "-interaction=nonstopmode",
+        "-synctex=1",
+        "-auxdir=.aux",
+        "-f",
+        "Plantilla.tex"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "LaTeX: Clean (latexmk -c)",
+      "type": "shell",
+      "command": "latexmk",
+      "args": [
+        "-c",
+        "Plantilla.tex"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "LaTeX: Word Count (texcount)",
+      "type": "shell",
+      "command": "texcount",
+      "args": [
+        "-inc",
+        "-merge",
+        "-sum",
+        "Plantilla.tex"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    }
+  ]
+}

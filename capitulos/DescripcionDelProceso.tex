@@ -1,8 +1,27 @@
 % =========================
+% !TeX root = ../Plantilla.tex
 % capitulos/DescripcionDelProceso.tex
 % =========================
 
 \section{Descripción del proceso}
-El sistema a controlar es un tanque de agua con una dinámica no lineal. La entrada de control actúa sobre el caudal de entrada mediante una válvula, mientras que el caudal de salida depende de un parámetro geométrico (diámetro del tubo de salida, constante) y de la presión asociada al nivel de agua, que varía con el propio nivel. Esta dependencia hace que el comportamiento global no sea lineal, lo que motiva el uso de un controlador basado en reglas \cite{mathworks_simulate_fis_simulink}.
+El sistema a controlar es un tanque de agua con una dinámica no lineal. La entrada de control actúa sobre el caudal de entrada mediante una válvula, mientras que el caudal de salida depende de un parámetro geométrico (diámetro del tubo de salida, constante) y de la presión asociada al nivel de agua, que varía con el propio nivel. Esta dependencia hace que el comportamiento global no sea lineal, lo que motiva el uso de un controlador basado en reglas.
 
-El objetivo de control es que el nivel del tanque siga una referencia (setpoint) ante cambios y perturbaciones, con una respuesta estable (sin oscilaciones sostenidas) y con un error estacionario reducido. El ejemplo de Simulink permite comparar una solución inicial simple (reglas basadas solo en error) con una mejora que incorpora la tendencia del nivel (derivada o razón de cambio) \cite{mathworks_simulate_fis_simulink}.
+El objetivo de control es que el nivel del tanque siga una referencia (setpoint) ante cambios y perturbaciones, con una respuesta estable (sin oscilaciones sostenidas) y con un error estacionario reducido. El ejemplo de Simulink permite comparar una solución inicial simple (reglas basadas solo en error) con una mejora que incorpora la tendencia del nivel (derivada o razón de cambio).
+
+\subsection{Planteamiento del problema de control}
+Desde el punto de vista de ingeniería de control, el problema consiste en regular una variable de proceso (nivel) que responde de manera lenta y no lineal a la acción de mando. Esta no linealidad implica que una misma variación de la válvula no produce siempre la misma variación de nivel, ya que la sensibilidad cambia según la altura de agua acumulada. Por ello, un esquema de control difuso resulta adecuado al permitir traducir conocimiento experto en reglas lingüísticas robustas frente a cambios de régimen.
+
+Además, el sistema debe operar con compromiso entre rapidez y suavidad. Una acción de control demasiado agresiva puede reducir temporalmente el error, pero también aumentar el sobreimpulso y las oscilaciones. En cambio, una acción demasiado conservadora mejora la estabilidad, aunque penaliza el tiempo de establecimiento. El diseño final del controlador busca equilibrar ambos criterios para obtener una respuesta útil en condiciones realistas.
+
+\subsection{Estrategia de modelado y simulación}
+El proceso se simula en un entorno de bloques donde se integran el modelo del tanque, el cálculo del error y el controlador difuso. Se usan escenarios con referencias escalón y se observan el nivel, error y señal de control en el tiempo. A partir de estos resultados se identifican problemas (retardo, oscilación, saturación) y se ajustan las funciones de pertenencia o reglas si es necesario.
+
+% \subsection{Ciclo de diseño iterativo del controlador}
+% El proceso de diseño sigue una lógica iterativa. En una primera versión, se parte de reglas simples asociadas únicamente al error de nivel, lo que permite obtener una base funcional y fácil de interpretar. Sin embargo, esta aproximación suele ser insuficiente cerca del setpoint, donde pequeñas variaciones pueden producir cambios de mando desproporcionados.
+
+% En una segunda iteración se incorpora la razón de cambio del nivel como variable adicional de decisión. Esta información de tendencia añade capacidad predictiva: no solo importa cuán lejos está el nivel de la referencia, sino también si se acerca o se aleja de ella. Con ello, el controlador puede anticipar correcciones suaves en torno al equilibrio y mejorar el amortiguamiento del sistema.
+
+\subsection{Criterios de evaluación del desempeño}
+Para valorar el resultado se emplean indicadores clásicos de control: tiempo de subida, sobreimpulso, tiempo de establecimiento y error en régimen permanente. De forma cualitativa, también se analiza la suavidad de la señal de válvula, ya que oscilaciones rápidas de la actuación pueden no ser deseables en un sistema físico real por desgaste o consumo energético.
+
+Finalmente, la comparación entre la configuración inicial y la configuración mejorada permite justificar técnicamente la inclusión de la variable de tendencia. La versión enriquecida mantiene el seguimiento de referencia y reduce la oscilación alrededor del punto de operación, aportando una respuesta más estable y consistente con los objetivos del proyecto.

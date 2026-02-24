@@ -1,18 +1,59 @@
 % =========================
+% !TeX root = ../Plantilla.tex
 % capitulos/Modelo.tex
 % =========================
 
 \section{Modelo en Simulink y componentes}
 \subsection{Bloques disponibles para simular un FIS}
-La simulación de un FIS en Simulink se realiza principalmente con los siguientes bloques \cite{mathworks_simulate_fis_simulink}:
+La simulación de un FIS en Simulink se realiza principalmente con los siguientes bloques:
 \begin{itemize}
     \item \textbf{Fuzzy Logic Controller:} evalúa un FIS (tipo 1 y, según configuración, tipo 2) y entrega la salida del controlador.
     \item \textbf{Fuzzy Logic Controller with Ruleviewer:} equivalente al anterior, pero permite visualizar durante la simulación la inferencia de reglas.
     \item \textbf{FIS Tree:} permite simular estructuras en árbol de FIS interconectados (útil en diseños jerárquicos).
 \end{itemize}
 
+Cuando se menciona ``tipo de sistema'' en el contexto difuso, se hace referencia al tipo de sistema de inferencia difusa (FIS). De forma breve: un FIS tipo 1 usa funciones de pertenencia nítidas, mientras que un FIS tipo 2 incorpora incertidumbre adicional en dichas funciones.
+
+En este contexto, ``incertidumbre'' significa que algunas magnitudes del problema no se conocen con exactitud o varían en el tiempo: ruido de sensor, pequeñas variaciones de parámetros del proceso, perturbaciones externas o ambigüedad al definir términos lingüísticos como ``nivel bajo'' o ``sube rápido''.
+
+\textbf{Limitaciones del FIS tipo 1.} En un FIS tipo 1, las funciones de pertenencia se definen de forma determinista (por ejemplo, una función triangular o trapezoidal con parámetros fijos). Esta rigidez puede ser insuficiente cuando el sistema opera bajo condiciones cambiantes o con incertidumbre significativa en las mediciones. Por ejemplo, si el sensor de nivel presenta ruido variable, un tipo 1 no puede adaptar su comportamiento a ese rango de incertidumbre, lo que puede degradar la calidad del control en escenarios reales.
+
+\textbf{Ventajas del FIS tipo 2.} Un FIS tipo 2 representa explícitamente esa falta de precisión en las funciones de pertenencia: cada función se describe no con un único contorno, sino con una región de incertidumbre (footprint of uncertainty). Esto permite que el controlador sea más robusto cuando las condiciones reales difieren del modelo nominal, ya que puede manejar automáticamente variaciones en las entradas sin necesidad de reajustar parámetros.
+
+\textbf{Alcance de este trabajo.} En el presente proyecto se utiliza un FIS tipo 1 estándar (Mamdani), que resulta adecuado para el escenario planteado, donde el modelo del tanque es suficientemente preciso y las perturbaciones son moderadas. La mención al tipo 2 se realiza únicamente con fines de contextualización teórica y para justificar futuras extensiones en entornos más exigentes.
+
 \subsection{Modelo \texttt{sltank}}
-El modelo \texttt{sltank} implementa un lazo de control donde el bloque \textit{Fuzzy Logic Controller} recibe dos señales relacionadas con el nivel del agua y genera una acción sobre la válvula. Para que el bloque funcione, el parámetro \textit{FIS name} debe referenciar un objeto FIS existente en el \textit{workspace} de MATLAB (por ejemplo, un \texttt{mamfis} llamado \texttt{tank}) \cite{mathworks_simulate_fis_simulink}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{fotos/Modelo.PNG}
+    \caption{Modelo Simulink del tanque de agua con controlador difuso.}
+    \label{fig:sltank}
+\end{figure}
+
+El modelo \texttt{sltank} implementa un lazo de control donde el bloque \textit{Fuzzy Logic Controller} recibe dos señales relacionadas con el nivel del agua y genera una acción sobre la válvula. Para que el bloque funcione, el parámetro \textit{FIS name} debe referenciar un objeto FIS existente en el \textit{workspace} de MATLAB (por ejemplo, un \texttt{mamfis} llamado \texttt{tank}).
 
 \subsection{Modelo \texttt{sltankrule} (Ruleviewer)}
-La variante \texttt{sltankrule} utiliza el bloque \textit{Fuzzy Logic Controller with Ruleviewer}. La estructura general del lazo es la misma, pero se añade la posibilidad de inspeccionar qué reglas se activan y con qué intensidad. Además, al pausar la simulación se pueden ajustar manualmente las entradas en el visor para observar el efecto sobre la inferencia y la salida del controlador \cite{mathworks_simulate_fis_simulink}.
+La variante \texttt{sltankrule} utiliza el bloque \textit{Fuzzy Logic Controller with Ruleviewer}. La estructura general del lazo es la misma, pero se añade la posibilidad de inspeccionar qué reglas se activan y con qué intensidad. Además, al pausar la simulación se pueden ajustar manualmente las entradas en el visor para observar el efecto sobre la inferencia y la salida del controlador.
+
+\lstinputlisting[language=MATLAB, firstline=14, lastline=15]{codigo/SimulateFuzzyInferenceSystemExample_clean.m}
+
+\subsubsection{Carga del FIS y configuración inicial}
+\lstinputlisting[language=MATLAB, firstline=1, lastline=7]{codigo/SimulateFuzzyInferenceSystemExample_clean.m}
+
+En esta sección se cargan las variables necesarias del archivo FIS y se prepara el espacio de trabajo. La importación del objeto FIS es crítica en el control difuso, ya que contiene la definición completa del sistema: funciones de pertenencia, base de reglas e interpretación de operadores (AND, OR, implicación).
+
+\subsubsection{Preparación de entradas y simulación}
+\lstinputlisting[language=MATLAB, firstline=8, lastline=10]{codigo/SimulateFuzzyInferenceSystemExample_clean.m}
+
+Aquí se generan los vectores de entrada que alimentarán el controlador difuso. La discretización del espacio de entrada es fundamental para evaluar cómo el FIS responde en diferentes puntos de operación. Esta exploración sistemática del dominio de entrada permite validar la coherencia de las decisiones de control difuso en todo el rango de funcionamiento esperado.
+
+\subsubsection{Evaluación del sistema de inferencia}
+\lstinputlisting[language=MATLAB, firstline=11, lastline=14]{codigo/SimulateFuzzyInferenceSystemExample_clean.m}
+
+La evaluación del FIS mediante el método \texttt{evalfis()} ejecuta el proceso completo de defuzzificación: fusificación de entradas, activación de reglas mediante los operadores lógicos configurados, agregación de consecuentes y finalmente obtención de la salida nítida. Este módulo es el núcleo del controlador difuso implementado en Simulink.
+
+\subsubsection{Visualización de resultados}
+\lstinputlisting[language=MATLAB, firstline=15, lastline=19]{codigo/SimulateFuzzyInferenceSystemExample_clean.m}
+
+Las gráficas de superficie (plotsurf) ofrecen una vista tridimensional de la relación entrada-salida del controlador difuso. Esta representación es esencial para validar que el comportamiento del FIS es suave, sin discontinuidades abruptas, y que la ley de control adopta la forma esperada según el diseño de las reglas lingüísticas.

@@ -1,32 +1,28 @@
 % =========================
+% !TeX root = ../Plantilla.tex
 % capitulos/AnalisisControlador.tex
 % =========================
 
 \section{Diseño y análisis del controlador difuso}
 \subsection{Variables del FIS}
-En el ejemplo se emplean dos entradas y una salida \cite{mathworks_simulate_fis_simulink}:
+En el ejemplo se emplean dos entradas y una salida:
 \begin{itemize}
     \item \textbf{Entrada 1 (\texttt{level}):} error de nivel (diferencia entre referencia y nivel medido).
     \item \textbf{Entrada 2 (\texttt{rate}):} razón de cambio del nivel (tendencia: subiendo/bajando).
     \item \textbf{Salida (\texttt{valve}):} acción sobre la válvula (velocidad/corrección de apertura o cierre).
 \end{itemize}
-
-\subsection{Primer diseño de reglas (solo error de nivel)}
-Como punto de partida, se definen reglas que dependen únicamente del error de nivel. La lógica es directa: si el nivel es correcto, no se modifica la válvula; si el nivel es bajo, se abre rápido; si el nivel es alto, se cierra rápido. Esta base inicial es útil por su simplicidad, pero puede ser insuficiente para amortiguar correctamente el sistema \cite{mathworks_simulate_fis_simulink}.
-
-\subsection{Comportamiento observado: oscilaciones alrededor del setpoint}
-Al simular con las reglas iniciales, el nivel puede oscilar alrededor de la referencia. La causa principal es que el controlador decide solo por error instantáneo y no tiene en cuenta la tendencia: cuando el nivel se aproxima al setpoint, la corrección puede llegar tarde o ser demasiado intensa, favoreciendo sobreimpulso y oscilación \cite{mathworks_simulate_fis_simulink}.
-
-\subsection{Mejora de reglas incorporando la variable \texttt{rate}}
-Para reducir las oscilaciones, se añaden reglas activas cuando el nivel está cerca del setpoint (\textit{okay}) y se usa \texttt{rate} para actuar de forma más suave:
+\subsection{Reglas implementadas del controlador difuso}
+El diseño de reglas evoluciona desde una lógica simple basada únicamente en el error de nivel hacia una estrategia que incorpora la tendencia (\texttt{rate}) para mejorar la estabilidad. Las reglas finales son:
 \begin{itemize}
-    \item Si el nivel es \textit{okay} y está aumentando (\texttt{rate} positivo), cerrar la válvula lentamente.
-    \item Si el nivel es \textit{okay} y está disminuyendo (\texttt{rate} negativo), abrir la válvula lentamente.
+    \item Si el nivel es bajo, abrir la válvula rápido.
+    \item Si el nivel es alto, cerrar la válvula rápido.
+    \item Si el nivel es correcto y está aumentando, cerrar la válvula lentamente.
+    \item Si el nivel es correcto y está disminuyendo, abrir la válvula lentamente.
 \end{itemize}
-Con esta modificación se mejora el amortiguamiento cerca de la referencia y el seguimiento resulta más estable (sin oscilaciones apreciables) \cite{mathworks_simulate_fis_simulink}.
+Esta configuración reduce significativamente las oscilaciones alrededor del setpoint al amortiguar la corrección cerca de la referencia, logrando un seguimiento estable sin comportamientos transitorios pronunciados.
 
 \subsection{Opciones de simulación y trazabilidad (comentario breve)}
-La documentación distingue dos modos de simulación para los bloques relacionados: \textit{Interpreted execution} y \textit{Code generation}. Asimismo, el bloque puede exponer señales internas del proceso de inferencia para depuración: entradas fuzzificadas, fuerza de disparo de reglas, salidas por regla y salida agregada. Estas señales permiten entender mejor la contribución de cada regla y localizar configuraciones conflictivas \cite{mathworks_simulate_fis_simulink}.
+La documentación distingue dos modos de simulación para los bloques relacionados: \textit{Interpreted execution} y \textit{Code generation}. Asimismo, el bloque puede exponer señales internas del proceso de inferencia para depuración: entradas fuzzificadas, fuerza de disparo de reglas, salidas por regla y salida agregada. Estas señales permiten entender mejor la contribución de cada regla y localizar configuraciones conflictivas.
 
 \subsection{Correspondencias con \texttt{evalfis} / \texttt{evalfisOptions}}
 El ejemplo también describe una equivalencia conceptual entre parámetros/puertos del

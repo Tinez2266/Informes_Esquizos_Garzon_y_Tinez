@@ -1,8 +1,9 @@
+% !TeX root = ../Plantilla.tex
 % =========================
 % capitulos/Conclusiones.tex
 % =========================
 
 \section{Conclusiones}
-Se ha descrito el ejemplo \texttt{sltank} de MathWorks para simular un controlador difuso en Simulink mediante \textit{Fuzzy Logic Toolbox}. El flujo propuesto es incremental: partir de una base de reglas mínima basada en el error de nivel y, tras observar oscilaciones alrededor del setpoint, incorporar la variable de tendencia (\texttt{rate}) para suavizar la actuación cerca de la referencia \cite{mathworks_simulate_fis_simulink}.
+Se ha descrito el ejemplo \texttt{sltank} de MathWorks para simular un controlador difuso en Simulink mediante \textit{Fuzzy Logic Toolbox}. El flujo propuesto es incremental: partir de una base de reglas mínima basada en el error de nivel y, tras observar oscilaciones alrededor del setpoint, incorporar la variable de tendencia (\texttt{rate}) para suavizar la actuación cerca de la referencia.
 
-La variante \texttt{sltankrule} con \textit{Ruleviewer} resulta especialmente útil para comprender y depurar la inferencia (qué reglas se activan y con qué intensidad). Finalmente, se han comentado opciones avanzadas: modos de simulación, acceso a señales internas y correspondencias con la evaluación del FIS en MATLAB, que aportan trazabilidad cuando se requiere un análisis más fino del comportamiento \cite{mathworks_simulate_fis_simulink}.
+La variante \texttt{sltankrule} con \textit{Ruleviewer} resulta especialmente útil para comprender y depurar la inferencia (qué reglas se activan y con qué intensidad). Finalmente, se han comentado opciones avanzadas: modos de simulación, acceso a señales internas y correspondencias con la evaluación del FIS en MATLAB, que aportan trazabilidad cuando se requiere un análisis más fino del comportamiento.

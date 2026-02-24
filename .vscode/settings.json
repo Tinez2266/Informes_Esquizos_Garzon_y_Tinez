@@ -1,30 +1,33 @@
 {
   "cSpell.language": "es,en",
 
-  // 📦 Compilación automática al guardar
-  "latex-workshop.latex.autoBuild.run": "onSave",
+  // 📦 Compilación manual: en Live Share usa terminal compartida del host;
+  // en local usa las mismas tareas de VS Code.
+  "latex-workshop.latex.autoBuild.run": "never",
 
   // ⚙️ Herramientas de compilación y limpieza
   "latex-workshop.latex.tools": [
     {
       "name": "pdflatex",
       "command": "pdflatex",
+      "cwd": "%DIR%",
       "args": [
         "-interaction=nonstopmode",
         "-synctex=1",
-        "%DOC%"
+        "%DOCFILE%"
       ]
     },
     {
       "name": "latexmk",
       "command": "latexmk",
+      "cwd": "%DIR%",
       "args": [
         "-pdf",
         "-interaction=nonstopmode",
         "-synctex=1",
         "-auxdir=.aux",
         "-f",
-        "%DOC%"
+        "%DOCFILE%"
       ]
     },
     {
@@ -86,6 +89,16 @@
   // Archivos raíz específicos para el proyecto
   "latex-workshop.latex.search.rootFiles.include": [
       "Plantilla.tex"
+  ],
+
+  // 🔢 Conteo de palabras (texcount)
+  "latex-workshop.texcount.path": "texcount",
+  "latex-workshop.texcount.args": [
+    "-inc",
+    "-merge",
+    "-sum",
+    "-q",
+    "%DOCFILE%"
   ]
   
 }
