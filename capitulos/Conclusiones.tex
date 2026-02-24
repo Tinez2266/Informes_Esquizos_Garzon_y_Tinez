@@ -1,0 +1,451 @@
+%!TeX root = Plantilla.tex
+\section{Conclusiones}
+
+En este trabajo se ha diseñado e implementado un controlador predictivo no lineal (NMPC) para el control de posición de una carga suspendida en una grúa. El controlador maneja satisfactoriamente la dinámica no lineal, el acoplamiento entre variables y las restricciones físicas del sistema.
+
+Se ha verificado que el NMPC sigue adecuadamente las trayectorias de referencia manteniendo el ángulo del péndulo próximo a cero. El análisis de restricciones angulares más severas evidencia un compromiso entre la reducción de oscilaciones y el desempeño en seguimiento. La introducción de restricciones terminales mejora la estabilidad sin eliminar completamente el error de seguimiento.
+
+Al duplicar la frecuencia de referencia, fue necesaria una resintonización del controlador, reduciendo el peso del eje horizontal $r_{x_m}$ e incrementando $r_{y_m}$. Los resultados confirman la capacidad del NMPC para gestionar sistemas no lineales con múltiples restricciones y subrayan la importancia de una correcta sintonización de las matrices de ponderación y la adaptación del controlador ante requisitos más exigentes de seguimiento.
+
+%\coffeestainA{0.9}{0.85}{-25}{5cm}{10cm}
+
+
+% \begin{figure}[H]
+%     \centering
+%     \begin{tikzpicture}
+%     \begin{axis}[
+%         width=0.96\linewidth,
+%         height=0.8\linewidth,
+%         scale only axis=false,
+%         title={Salidas del sistema},
+%         xlabel={t(s)},
+%         ylabel={$x_m$ (m)},
+%         grid=major,
+%         %ytick={0, 200, 400, 600, 800, 1000, 1200, 1400},
+%         xmin=00, % El eje X empieza en 0
+%         xmax=30,
+%         legend pos=south east
+%     ]
+%         \addplot[
+%             color=green,
+%             mark=none,
+%             dashed
+%         ]
+%         coordinates{
+%             (0,4)(31,4)
+%         };
+%         %\addlegendentry{$ref_{x_m}$}
+%         \addplot[
+%             color=green,
+%             mark=none,
+%             dashed
+%         ]
+%         coordinates{
+%             (0,-4)(31,-4)
+%         };
+%         %\addlegendentry{$ref_{x_m}$}
+%         \addplot[
+%             color=NavyBlue,
+%             mark=none
+%         ]
+%         table[
+%         x=t,
+%         y=xm
+%         ]{datos/PL6_1.dat};
+%         %\addlegendentry{$x_m$}
+%         \addplot[
+%             color=red,
+%             mark=none,
+%             dashed
+%         ]
+%         table[
+%         x=t,
+%         y=refxm
+%         ]{datos/PL6_1.dat};
+%         %\addlegendentry{$ref_{x_m}$}
+%     \end{axis}
+%     \end{tikzpicture}
+%     \begin{tikzpicture}
+%     \begin{axis}[
+%         width=0.96\linewidth,
+%         height=0.8\linewidth,
+%         scale only axis=false,
+%         %title={Salidas del sistema},
+%         xlabel={t(s)},
+%         ylabel={$y_m$ (m)},
+%         grid=major,
+%         %ytick={0, 200, 400, 600, 800, 1000, 1200, 1400},
+%         xmin=00, % El eje X empieza en 0
+%         xmax=30,
+%         legend pos=south east
+%     ]
+%         \addplot[
+%             color=green,
+%             mark=none,
+%             dashed
+%         ]
+%         coordinates{
+%             (0,2)(31,2)
+%         };
+%         %\addlegendentry{$ref_{x_m}$}
+%         \addplot[
+%             color=green,
+%             mark=none,
+%             dashed
+%         ]
+%         coordinates{
+%             (0,0)(31,0)
+%         };
+%         %\addlegendentry{$ref_{x_m}$}
+%         \addplot[
+%             color=NavyBlue,
+%             mark=none
+%         ]
+%         table[
+%         x=t,
+%         y=ym
+%         ]{datos/PL6_1.dat};
+%         %\addlegendentry{$x_m$}
+%         \addplot[
+%             color=red,
+%             mark=none,
+%             dashed
+%         ]
+%         table[
+%         x=t,
+%         y=refym
+%         ]{datos/PL6_1.dat};
+%         %\addlegendentry{$ref_{x_m}$}
+%     \end{axis}
+%     \end{tikzpicture}
+%     \caption{Comparación referencia vs Salidas del sistema con y sin restricciones}
+%     %\label{fig:Comparación de velocidad de salida $\omega_e$ con el modelo base}
+% \end{figure}%xm ym
+
+% \begin{figure}[H]
+%     \centering
+%     \begin{tikzpicture}
+%     \begin{axis}[
+%         width=0.96\linewidth,
+%         height=0.8\linewidth,
+%         scale only axis=false,
+%         title={Salidas del sistema},
+%         xlabel={t(s)},
+%         ylabel={$f_x$ (N)},
+%         grid=major,
+%         %ytick={0, 200, 400, 600, 800, 1000, 1200, 1400},
+%         xmin=00, % El eje X empieza en 0
+%         xmax=30,
+%         legend pos=south east
+%     ]
+%         \addplot[
+%             color=green,
+%             mark=none,
+%             dashed
+%         ]
+%         coordinates{
+%             (0,50)(31,50)
+%         };
+%         %\addlegendentry{$ref_{x_m}$}
+%         \addplot[
+%             color=green,
+%             mark=none,
+%             dashed
+%         ]
+%         coordinates{
+%             (0,-50)(31,-50)
+%         };
+%         %\addlegendentry{$ref_{x_m}$}
+%         \addplot[
+%             color=NavyBlue,
+%             mark=none,
+%             const plot
+%         ]
+%         table[
+%         x=t,
+%         y=fx
+%         ]{datos/PL6_1.dat};
+%         %\addlegendentry{$x_m$}
+%     \end{axis}
+%     \end{tikzpicture}
+%     \begin{tikzpicture}
+%     \begin{axis}[
+%         width=0.96\linewidth,
+%         height=0.8\linewidth,
+%         scale only axis=false,
+%         %title={Salidas del sistema},
+%         xlabel={t(s)},
+%         ylabel={$f_l$ (N)},
+%         grid=major,
+%         %ytick={0, 200, 400, 600, 800, 1000, 1200, 1400},
+%         xmin=00, % El eje X empieza en 0
+%         xmax=30,
+%         legend pos=south east
+%     ]
+%         \addplot[
+%             color=green,
+%             mark=none,
+%             dashed
+%         ]
+%         coordinates{
+%             (0,50)(31,50)
+%         };
+%         %\addlegendentry{$ref_{x_m}$}
+%         \addplot[
+%             color=green,
+%             mark=none,
+%             dashed
+%         ]
+%         coordinates{
+%             (0,-50)(31,-50)
+%         };
+%         %\addlegendentry{$ref_{x_m}$}
+%         \addplot[
+%             color=NavyBlue,
+%             mark=none,
+%             const plot
+%         ]
+%         table[
+%         x=t,
+%         y=fl
+%         ]{datos/PL6_1.dat};
+%         %\addlegendentry{$x_m$}
+%     \end{axis}
+%     \end{tikzpicture}
+%     \caption{Comparación referencia vs Salidas del sistema con y sin restricciones}
+%     %\label{fig:Comparación de velocidad de salida $\omega_e$ con el modelo base}
+% \end{figure}%fl fx
+
+% \begin{figure}[H]
+%     \centering
+%     \begin{tikzpicture}
+%     \begin{axis}[
+%         width=0.96\linewidth,
+%         height=0.8\linewidth,
+%         scale only axis=false,
+%         title={Salidas del sistema},
+%         xlabel={t(s)},
+%         ylabel={$df_x$ (N/step)},
+%         grid=major,
+%         %ytick={0, 200, 400, 600, 800, 1000, 1200, 1400},
+%         xmin=00, % El eje X empieza en 0
+%         xmax=30,
+%         legend pos=south east
+%     ]
+%         \addplot[
+%             color=green,
+%             mark=none,
+%             dashed
+%         ]
+%         coordinates{
+%             (0,10)(31,10)
+%         };
+%         %\addlegendentry{$ref_{x_m}$}
+%         \addplot[
+%             color=green,
+%             mark=none,
+%             dashed
+%         ]
+%         coordinates{
+%             (0,-10)(31,-10)
+%         };
+%         %\addlegendentry{$ref_{x_m}$}
+%         \addplot[
+%             color=NavyBlue,
+%             mark=none,
+%             const plot
+%         ]
+%         table[
+%         x=t,
+%         y=dfx
+%         ]{datos/PL6_1.dat};
+%         %\addlegendentry{$x_m$}
+%     \end{axis}
+%     \end{tikzpicture}
+%     \begin{tikzpicture}
+%     \begin{axis}[
+%         width=0.96\linewidth,
+%         height=0.8\linewidth,
+%         scale only axis=false,
+%         %title={Salidas del sistema},
+%         xlabel={t(s)},
+%         ylabel={$df_l$ (N/step)},
+%         grid=major,
+%         %ytick={0, 200, 400, 600, 800, 1000, 1200, 1400},
+%         xmin=00, % El eje X empieza en 0
+%         xmax=30,
+%         legend pos=south east
+%     ]
+%         \addplot[
+%             color=green,
+%             mark=none,
+%             dashed
+%         ]
+%         coordinates{
+%             (0,10)(31,10)
+%         };
+%         %\addlegendentry{$ref_{x_m}$}
+%         \addplot[
+%             color=green,
+%             mark=none,
+%             dashed
+%         ]
+%         coordinates{
+%             (0,-10)(31,-10)
+%         };
+%         %\addlegendentry{$ref_{x_m}$}
+%         \addplot[
+%             color=NavyBlue,
+%             mark=none,
+%             const plot
+%         ]
+%         table[
+%         x=t,
+%         y=dfl
+%         ]{datos/PL6_1.dat};
+%         %\addlegendentry{$x_m$}
+%     \end{axis}
+%     \end{tikzpicture}
+%     \caption{Comparación referencia vs Salidas del sistema con y sin restricciones}
+%     %\label{fig:Comparación de velocidad de salida $\omega_e$ con el modelo base}
+% \end{figure}%dfx dfl
+
+% \begin{figure}[H]
+%     \centering
+%     \begin{tikzpicture}
+%     \begin{axis}[
+%         width=0.96\linewidth,
+%         height=0.6\linewidth,
+%         scale only axis=false,
+%         title={Salidas del sistema},
+%         xlabel={t(s)},
+%         ylabel={$x$ (m)},
+%         grid=major,
+%         %ytick={0, 200, 400, 600, 800, 1000, 1200, 1400},
+%         xmin=00, % El eje X empieza en 0
+%         xmax=30,
+%         legend pos=south east
+%     ]
+%         \addplot[
+%             color=green,
+%             mark=none,
+%             dashed
+%         ]
+%         coordinates{
+%             (0,5)(31,5)
+%         };
+%         %\addlegendentry{$ref_{x_m}$}
+%         \addplot[
+%             color=green,
+%             mark=none,
+%             dashed
+%         ]
+%         coordinates{
+%             (0,-5)(31,-5)
+%         };
+%         %\addlegendentry{$ref_{x_m}$}
+%         \addplot[
+%             color=NavyBlue,
+%             mark=none
+%         ]
+%         table[
+%         x=t,
+%         y=x
+%         ]{datos/PL6_1.dat};
+%         %\addlegendentry{$x_m$}
+%     \end{axis}
+%     \end{tikzpicture}
+%     \begin{tikzpicture}
+%     \begin{axis}[
+%         width=0.96\linewidth,
+%         height=0.6\linewidth,
+%         scale only axis=false,
+%         %title={Salidas del sistema},
+%         xlabel={t(s)},
+%         ylabel={$dl$ (m)},
+%         grid=major,
+%         %ytick={0, 200, 400, 600, 800, 1000, 1200, 1400},
+%         xmin=00, % El eje X empieza en 0
+%         xmax=30,
+%         legend pos=south east
+%     ]
+%         \addplot[
+%             color=green,
+%             mark=none,
+%             dashed
+%         ]
+%         coordinates{
+%             (0,2)(31,2)
+%         };
+%         %\addlegendentry{$ref_{x_m}$}
+%         \addplot[
+%             color=green,
+%             mark=none,
+%             dashed
+%         ]
+%         coordinates{
+%             (0,0)(31,0)
+%         };
+%         %\addlegendentry{$ref_{x_m}$}
+%         \addplot[
+%             color=NavyBlue,
+%             mark=none
+%         ]
+%         table[
+%         x=t,
+%         y=l
+%         ]{datos/PL6_1.dat};
+%         %\addlegendentry{$x_m$}
+%     \end{axis}
+%     \end{tikzpicture}
+%     \begin{tikzpicture}
+%     \begin{axis}[
+%         width=0.92\linewidth,
+%         height=0.6\linewidth,
+%         scale only axis=false,
+%         %title={Salidas del sistema},
+%         xlabel={t(s)},
+%         ylabel={$\theta$ (rad)},
+%          y tick label style={
+%             /pgf/number format/fixed,
+%             /pgf/number format/precision=4
+%         },
+%         scaled y ticks=false,
+%         grid=major,
+%         %ytick={0, 200, 400, 600, 800, 1000, 1200, 1400},
+%         xmin=00, % El eje X empieza en 0
+%         xmax=30,
+%         legend pos=south east
+%     ]
+%         \addplot[
+%             color=green,
+%             mark=none,
+%             dashed
+%         ]
+%         coordinates{
+%             (0,0.07854)(31,0.07854)
+%         };
+%         %\addlegendentry{$ref_{x_m}$}
+%         \addplot[
+%             color=green,
+%             mark=none,
+%             dashed
+%         ]
+%         coordinates{
+%             (0,-0.07854)(31,-0.07854)
+%         };
+%         %\addlegendentry{$ref_{x_m}$}
+%         \addplot[
+%             color=NavyBlue,
+%             mark=none
+%         ]
+%         table[
+%         x=t,
+%         y=theta
+%         ]{datos/PL6_1.dat};
+%         %\addlegendentry{$x_m$}
+%     \end{axis}
+%     \end{tikzpicture}
+%     \caption{Comparación referencia vs Salidas del sistema con y sin restricciones}
+%     %\label{fig:Comparación de velocidad de salida $\omega_e$ con el modelo base}
+% \end{figure}%x l theta

@@ -1,0 +1,91 @@
+{
+  "cSpell.language": "es,en",
+
+  // 📦 Compilación automática al guardar
+  "latex-workshop.latex.autoBuild.run": "onSave",
+
+  // ⚙️ Herramientas de compilación y limpieza
+  "latex-workshop.latex.tools": [
+    {
+      "name": "pdflatex",
+      "command": "pdflatex",
+      "args": [
+        "-interaction=nonstopmode",
+        "-synctex=1",
+        "%DOC%"
+      ]
+    },
+    {
+      "name": "latexmk",
+      "command": "latexmk",
+      "args": [
+        "-pdf",
+        "-interaction=nonstopmode",
+        "-synctex=1",
+        "-auxdir=.aux",
+        "-f",
+        "%DOC%"
+      ]
+    },
+    {
+      "name": "clean",
+      "command": "latexmk",
+      "args": ["-c"]
+    }
+  ],
+
+  // 🧰 Recetas: compilar y limpiar
+  "latex-workshop.latex.recipes": [
+    {
+      "name": "pdflatex",
+      "tools": ["pdflatex"]
+    },
+    {
+      "name": "pdflatex + clean",
+      "tools": ["pdflatex", "clean"]
+    },
+    {
+      "name": "latexmk",
+      "tools": ["latexmk"]
+    }
+  ],
+
+  "latex-workshop.latex.recipe.default": "latexmk",
+
+  // 🗑️ Limpieza habilitada y archivos a eliminar
+  "latex-workshop.latex.clean.enabled": true,
+  "latex-workshop.latex.clean.fileTypes": [
+    "*.aux", "*.bbl", "*.blg", "*.idx", "*.ind", "*.lof", "*.lot",
+    "*.out", "*.toc", "*.acn", "*.acr", "*.alg", "*.glg", "*.glo",
+    "*.gls", "*.ist", "*.fls", "*.log", "*.fdb_latexmk"
+  ],
+
+  // 📄 Detección automática del archivo raíz (útil si usas \input o subfiles)
+  "latex-workshop.latex.rootFile.useSubFile": true,
+  "latex-workshop.latex.rootFile.doNotPrompt": true,
+
+  // 🔄 Sincronización PDF <-> código
+  "latex-workshop.synctex.afterBuild.enabled": true,
+  "latex-workshop.synctex.synctexjs.enabled": true,
+
+  // 📚 Visor PDF integrado en una pestaña
+  "latex-workshop.view.pdf.viewer": "tab",
+
+  // 🧾 Ajustes visuales del editor
+  "editor.wordWrap": "on",
+  "editor.renderWhitespace": "boundary",
+  "editor.minimap.enabled": true,
+
+  // 💾 Guardado automático después de un tiempo
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 3000,
+
+  // Parpadeo rojo de cambio en el documento
+  "latex-workshop.view.pdf.highlight.changed": true,
+
+  // Archivos raíz específicos para el proyecto
+  "latex-workshop.latex.search.rootFiles.include": [
+      "Plantilla.tex"
+  ]
+  
+}

@@ -1,0 +1,99 @@
+\documentclass{article}
+\usepackage{estilo}
+
+\usepackage{subcaption}
+\usepackage[utf8]{inputenc} 
+%Añadidas por mi
+\usepackage[T1]{fontenc}
+
+\usepackage{graphicx}%Para usar el comando \scalebox
+\usepackage{amsmath}%Para escribir fórmulas matemáticas
+\usepackage{amssymb}%Para símbolos matemáticos adicionales
+\usepackage{amsfonts}%Para fuentes matemáticas adicionales
+\usepackage{float}%Para forzar la posición de las imágenes con [H]
+\usepackage{siunitx}%Para escribir unidades correctamente
+\usepackage{pgfplots}%Para importar datos y hacer gráficas
+\usepackage[dvipsnames]{xcolor}
+\pgfplotsset{compat=newest, every axis plot/.append style={line width=1.8pt}}
+\usepackage{coffeestains}
+
+% --- PAQUETES PARA CÓDIGO MATLAB ---
+\usepackage{listings}
+
+\lstset{
+    extendedchars=true,
+    literate=
+    {á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+    {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+    {ñ}{{\~n}}1 {Ñ}{{\~N}}1 {ü}{{\"u}}1 {¡}{{\textexclamdown}}1
+    {¿}{{\textquestiondown}}1,
+    language=MATLAB,
+    basicstyle=\ttfamily\scriptsize,
+    keywordstyle=\color{blue},
+    stringstyle=\color{violet},
+    commentstyle=\color{green!50!black},
+    numbers=left,
+    numberstyle=\tiny,
+    breaklines=true,
+    frame=single,
+    showstringspaces=false % No resaltar los espacios
+}
+% En Español:
+\usepackage[spanish,es-tabla]{babel}
+\renewenvironment{abstract}{\centerline{\large\bf Resumen}\vspace{0.5ex} \vskip 1ex}
+
+% En Ingles:
+%\renewenvironment{abstract}{\centerline{\large\bf Abstract}\vspace{0.5ex} \vskip 1ex}
+
+\title{Informe PL6: MPC no lineal}
+
+\author{
+Iñigo Martínez Peña y Jon Garzón García\\
+imartinez280@ikasle.ehu.eus; jgarzon003@ikasle.ehu.eus    \\
+Control Predictivo y Robusto\\
+Máster en Ingeniería de Control, Automatización y Robótica\\  
+Escuela de Ingeniería de Bilbao, EIB \\
+\\ 
+}
+
+\begin{document}
+
+\maketitle
+
+%\coffeestainB{0.9}{0.85}{-25}{-5cm}{11cm}
+\begin{abstract}
+%{\em Resumen o abstract del artículo. Debe de tener una extensión aproximada de 15-20 líneas. 
+%
+%\vspace{6 cm} % Borrar este comando al escribir el resumen, es para calcular el espacio que ocupara.
+%}
+ 
+\input{capitulos/Resumen.tex}
+
+% En Español: 
+%{\bf Palabras clave:} Automatización Naval; Seguridad Marítima; Puertas de estanqueidad; Luces de navegación; PLC; SCADA%Palabras clave entregadas en la Tarea 1, separadas por;\\
+% En Ingles: 
+%{\bf Keywords:} Marine Automation; Risk assessment; Network Protocols; Marine safety; Engine Room; IOT; Industrial Communications; IEC 61131-3; PLC; SCADA%Palabras clave entregadas en la Tarea 1, separadas por;\\
+
+\end{abstract}
+
+% En Español: 
+
+% En Ingles: 
+%\section{INTRODUCTION}
+
+%Introducción a la problemática + Estado del Arte * Aportación del Artículo.
+
+%Tiene que tener una extensión aproximada de 900-1000 palabras, mientras que la longitud aproximada del trabajo tienes que ser de 2 páginas.
+
+% Estado del arte
+\input{capitulos/DescripcionDelProceso.tex}
+\input{capitulos/Modelo.tex}
+\input{capitulos/AnalisisControlador.tex}
+\input{capitulos/Conclusiones.tex}
+%% BIBLIOGRAFÍA
+%\bibliographystyle{ieeetr}
+%\nocite{*} % Esto incluye todas las referencias del .bib aunque no se citen en el texto
+%\bibliography{Referencias} % Poner el nombre de vuestra librería
+% 12-15 referencias
+
+\end{document}

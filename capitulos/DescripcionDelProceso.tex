@@ -1,0 +1,30 @@
+\section{Descripción del Proceso}
+En esta práctica se considera una grúa pórtico (Fig.~\ref{fig:grua_puente}) formada por un carro de masa $M$ que se desplaza longitudinalmente una distancia $x(t)$ y una carga de masa $m$ suspendida mediante un cable de longitud variable $l(t)$. El movimiento de la carga se caracteriza además por el ángulo $\theta(t)$ respecto a la vertical, cuya oscilación debe mantenerse acotada durante el transporte.  
+La planta dispone de dos actuadores: el motor de traslación del carro, que aplica la fuerza $f_x(t)$, y el motor de izado, que aplica la fuerza $f_l(t)$ (recogida/soltado del cable), de manera que el problema es multivariable con acoplamiento no lineal entre traslación, longitud del cable y balanceo.  
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{fotos/grua_puente.png}
+    \caption{Esquema del sistema grúa pórtico (carro, cable y carga).}
+    \label{fig:grua_puente}
+\end{figure}
+
+La dinámica no lineal del sistema puede describirse mediante el siguiente conjunto de ecuaciones implícitas (con rozamiento lineal en el carro y en el izado):  
+\begin{equation}
+    \begin{aligned}
+        0 &= m\,l^2\,\ddot{\theta} + m\,l\cos(\theta)\,\ddot{x} + 2m\,l\,\dot{l}\,\dot{\theta} + m\,g\,l\,\sin(\theta)\\
+        0 &= (M+m)\,\ddot{x} + m\,l\cos(\theta)\,\ddot{\theta} + m\,l\sin(\theta)\,\ddot{l} + b_x\,\dot{x}\\
+        &\quad + 2m\cos(\theta)\,\dot{l}\,\dot{\theta} - m\,l\sin(\theta)\,\dot{\theta}^2 - f_x\\
+        0 &= (M+m)\,\ddot{l} + m\sin(\theta)\,\ddot{x} + b_l\,\dot{l} - m\,l\,\dot{\theta}^2\\
+        &\quad - m\,g\cos(\theta) - f_l
+    \end{aligned}
+\end{equation}
+
+Los parámetros son: $m=0.1\,\mathrm{kg}$, $M=1\,\mathrm{kg}$, $b_x=0.5\,\mathrm{N}/(\mathrm{m}/\mathrm{s})$ y $b_l=0.05\,\mathrm{N}/(\mathrm{m}/\mathrm{s})$.
+A partir de $x(t)$, $\theta(t)$ y $l(t)$ se puede obtener la posición cartesiana de la carga $(x_m(t),y_m(t))$ mediante las relaciones geométricas:  
+\begin{equation}
+    \begin{aligned}
+        x_m(t) &= x(t) + l(t)\,\sin\!\big(\theta(t)\big),\\
+        y_m(t) &= l(t)\,\cos\!\big(\theta(t)\big).
+    \end{aligned}
+\end{equation}

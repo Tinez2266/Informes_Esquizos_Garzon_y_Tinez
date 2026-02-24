@@ -1,0 +1,169 @@
+\section{Modelo}
+
+Se aborda el modelado de un controlador predictivo no lineal para la grúa. El controlador se formula en términos de las variaciones de fuerzas $\Delta f_x(t)$ y $\Delta f_l(t)$, con discretización $T_s = 0.1$ s y horizonte de predicción $T = 1$ s.
+
+\subsection{Modelo no lineal}
+
+Se emplea una formulación con estados extendidos para implementar la acción integral en ACADO Toolkit:
+\begin{equation}
+\mathbf{x}_e(t)=
+\begin{bmatrix}
+x_m(t) \\ y_m(t) \\ \dot{\theta}(t) \\ x(t) \\ l(t) \\ \theta(t) \\ \dot{x}(t) \\ \dot{l}(t) \\ f_x(t) \\ f_l(t)
+\end{bmatrix},
+\qquad
+\mathbf{u}_e(t)=
+\begin{bmatrix}
+\dot{f}_x(t) \\ \dot{f}_l(t)
+\end{bmatrix}.
+\end{equation}
+
+El modelo implícito no lineal es:
+\begin{equation}
+\mathbf{0} = \mathbf{f}\big(\dot{\mathbf{x}}_e(t),\mathbf{x}_e(t),\mathbf{u}_e(t)\big),
+\end{equation}
+
+definido por:
+\begin{equation}
+    \begin{aligned}
+        0 &= x_m - x - l\sin(\theta), \\
+        0 &= y_m - l\cos(\theta), \\
+        0 &= m l^2 \ddot{\theta} + m l \cos(\theta)\ddot{x}
+            + 2 m l \dot{l}\dot{\theta} + m g l \sin(\theta), \\
+        0 &= \dot{x} - \dot{x}, \\
+        0 &= \dot{l} - \dot{l}, \\
+        0 &= \dot{\theta} - \dot{\theta}, \\
+        0 &= (M+m)\ddot{x} + m l \cos(\theta)\ddot{\theta}
+            + m l \sin(\theta)\ddot{l}
+            + b_x\dot{x}\\
+            &\quad + 2 m \cos(\theta)\dot{l}\dot{\theta}
+            - m l \sin(\theta)\dot{\theta}^2 - f_x, \\
+        0 &= (M+m)\ddot{l} + m \sin(\theta)\ddot{x}
+            + b_l\dot{l} - m l \dot{\theta}^2\\
+            &\quad- m g \cos(\theta) - f_l, \\
+        0 &= \dot{f}_x - \dot{f}_x, \\
+        0 &= \dot{f}_l - \dot{f}_l.
+    \end{aligned}
+\end{equation}
+
+En ACADO Toolkit:
+
+DifferentialState xm ym dtheta x l theta dx dl fx fl;
+
+junto con la correspondiente definición del sistema de ecuaciones diferenciales implícitas, tal y como se proporciona en la plantilla base de la práctica.
+
+\subsection{Matrices de ponderación}
+
+Dado que el objetivo principal es el seguimiento de las posiciones de la carga $(x_m(t),y_m(t))$, se asignan ponderaciones elevadas a estos estados, fijando $r_{x_m}=50$ y $r_{y_m}=10$, mientras que para reducir las oscilaciones del péndulo se impone una referencia nula sobre el ángulo $\theta(t)$ con una ponderación $r_\theta=10$.
+
+La acción de control incremental se penaliza mediante $\alpha_{\Delta f_x}=\alpha_{\Delta f_l}=0.01$, definiéndose así las matrices de ponderación del estado y del estado terminal como,
+\begin{equation}
+\mathbf{W} \in \mathbb{R}^{12\times12},
+\qquad
+\mathbf{W}_N \in \mathbb{R}^{10\times10},
+\end{equation}
+con estructura diagonal y valores no nulos únicamente en los estados y acciones relevantes para el control.
+
+\subsection{Restricciones}
+
+El sistema está sujeto a las siguientes restricciones físicas sobre estados, fuerzas y variaciones de control:
+\begin{equation}
+    \begin{aligned}
+        -4 &\leq x_m(t) \leq 4 \;[\mathrm{m}], \\
+        0 &\leq y_m(t) \leq 2 \;[\mathrm{m}], \\
+        -4 &\leq x(t) \leq 4 \;[\mathrm{m}], \\
+        0 &\leq l(t) \leq 2 \;[\mathrm{m}], \\
+        -\frac{\pi}{40} &\leq \theta(t) \leq \frac{\pi}{40  } \;[\mathrm{rad}], \\
+        -50 &\leq f_x(t) \leq 50 \;[\mathrm{N}], \\
+        -50 &\leq f_l(t) \leq 50 \;[\mathrm{N}], \\
+        -10 &\leq \Delta f_x(t) \leq 10 \;[\mathrm{N/step}], \\
+        -10 &\leq \Delta f_l(t) \leq 10 \;[\mathrm{N/step}].
+    \end{aligned}
+\end{equation}
+
+Esto se implementaría en ACADO Toolkit mediante las instrucciones:
+%\lstinputlisting[language=MATLAB, firstline=166, lastline=174]{codigo/ControladorNMPC_Grua_old.m}
+\lstinputlisting[language=MATLAB, firstline=172, lastline=180]{codigo/ControladorNMPC_Grua.m}
+
+\subsection{Referencia}
+
+Se desea que la carga de la grúa siga una trayectoria sinusoidal en ambas coordenadas $(x_m(t),y_m(t))$, manteniendo simultáneamente el ángulo $\theta(t)$ próximo a cero durante todo el movimiento.
+
+La referencia se genera mediante,
+% \begin{verbatim}
+% Nsim = 30/Ts;
+% Freq1 = 0.05;
+% Freq2 = 0.1;
+% Ref = [zeros(1,20) sin(Freq1*[0:Nsim-1]);
+%        ones(1,20) 1+0.3*sin(Freq2*[0:Nsim-1])];
+% \end{verbatim}
+
+\lstinputlisting[language=MATLAB, firstline=250, lastline=254]{codigo/ControladorNMPC_Grua.m}
+
+Resultando en la siguiente trayectoria deseada:
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+    \begin{axis}[
+        width=0.96\linewidth,
+        height=0.4\linewidth,
+        scale only axis=false,
+        title={Referencias del sistema},
+        xlabel={t(s)},
+        ylabel={$x_m$ (m)},
+        grid=major,
+        %ytick={0, 200, 400, 600, 800, 1000, 1200, 1400},
+        xmin=00, % El eje X empieza en 0
+        xmax=30,
+        legend pos=south east
+    ]
+        \addplot[
+            color=NavyBlue,
+            mark=none
+        ]
+        table[
+        x=t,
+        y=refxm
+        ]{datos/PL6_1.dat};
+        %\addlegendentry{$ref_{x_m}$}
+    \end{axis}
+    \end{tikzpicture}
+    \begin{tikzpicture}
+    \begin{axis}[
+        width=0.96\linewidth,
+        height=0.4\linewidth,
+        scale only axis=false,
+        %title={Salidas del sistema},
+        xlabel={t(s)},
+        ylabel={$y_m$ (m)},
+        grid=major,
+        %ytick={0, 200, 400, 600, 800, 1000, 1200, 1400},
+        xmin=00, % El eje X empieza en 0
+        xmax=30,
+        legend pos=south east
+    ]
+        \addplot[
+            color=NavyBlue,
+            mark=none
+        ]
+        table[
+        x=t,
+        y=refym
+        ]{datos/PL6_1.dat};
+        %\addlegendentry{$ref_{x_m}$}
+    \end{axis}
+    \end{tikzpicture}
+    \caption{Trayectoria de referencia para la carga de la grúa}
+    %\label{fig:Comparación de velocidad de salida $\omega_e$ con el modelo base}
+\end{figure}%xm ym
+
+% \lstinputlisting[language=MATLAB, firstline=242, lastline=246]{codigo/ControladorNMPC_Grua_old.m}
+
+\subsection{Modelo de planta}
+
+Para la simulación de la planta se emplean los integradores internos de ACADO Toolkit, utilizando la función precompilada \texttt{integrate\_grua}, generada automáticamente a partir del modelo ODE cuando se habilita la opción \texttt{EXPORT=1}.
+
+La simulación de la dinámica de la grúa se realiza según,
+% \lstinputlisting[language=MATLAB, firstline=394, lastline=401]{codigo/ControladorNMPC_Grua_old.m}
+\lstinputlisting[language=MATLAB, firstline=410, lastline=417]{codigo/ControladorNMPC_Grua.m}
+
+donde $X$ representa el estado actual y $DU$ la acción de control calculada por el NMPC en cada instante.
