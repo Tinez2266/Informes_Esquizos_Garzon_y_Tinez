@@ -1,0 +1,41 @@
+\section{Resultados}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{fotos/grafica_salida.jpeg}
+    \caption{Comparación entre la señal de referencia (onda cuadrada) y la salida del sistema.}
+    \label{fig:salida}
+\end{figure}
+
+En la primera figura se muestra la comparación entre la señal de referencia (onda cuadrada) y la salida del sistema ante una excitación de amplitud 0,75 m y frecuencia 0,2 Hz. La salida reproduce correctamente los cambios de nivel, pero con la dinámica esperable de un proceso con inercia: frente a cada escalón se aprecia un transitorio suave (subida y bajada progresivas) y un retardo respecto a la referencia. En los tramos estacionarios la salida se aproxima al valor objetivo, quedando un comportamiento global coherente con un sistema de tipo “primer orden dominante” (respuesta sin oscilaciones apreciables y con evolución monótona hacia el nuevo nivel).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{fotos/grafica_control.jpeg}
+    \caption{Señal de control aplicada al sistema.}
+    \label{fig:control}
+\end{figure}
+
+En la figura \ref{fig:control}, correspondiente a la señal de control $u$, se observa cómo la acción de control aumenta de forma significativa en los instantes de conmutación de la referencia, con el objetivo de acelerar el transitorio, y posteriormente se reduce/modula para mantener el régimen estacionario. Este patrón es consistente con un control orientado al seguimiento: mayor esfuerzo al inicio del cambio (para vencer la dinámica del proceso) y menor esfuerzo una vez alcanzada la proximidad del setpoint. En conjunto, ambas señales indican que el controlador logra un seguimiento razonable de la referencia cuadrada, con limitación principal asociada a la propia dinámica del sistema (tiempo de establecimiento no instantáneo).
+
+Adicionalmente, se puede observar que el sistema no presenta sobreimpulsos ni oscilaciones indeseadas, lo cual es un indicio de una sintonización adecuada del controlador difuso. La respuesta suave y la ausencia de ruido en la señal de control sugieren que el sistema es robusto frente a pequeñas perturbaciones y variaciones en la referencia.
+
+En comparación con otros métodos de control clásico, el enfoque difuso utilizado aquí permite una mayor flexibilidad ante incertidumbres del modelo y variaciones en los parámetros del proceso. Esto se traduce en una mayor capacidad de adaptación y una respuesta más natural ante cambios bruscos en la referencia, sin comprometer la estabilidad ni la precisión.
+
+En resumen, los resultados experimentales validan la eficacia del controlador difuso implementado, mostrando un equilibrio adecuado entre rapidez de respuesta, estabilidad y esfuerzo de control. Estos hallazgos respaldan la viabilidad de aplicar técnicas de lógica difusa en sistemas reales donde la dinámica es incierta o variable.
+
+\subsection{Ventajas de la saturación brusca en la señal de control}
+
+Una característica relevante observada en la señal de control generada por el controlador difuso es la tendencia a llevar la válvula a su nivel máximo de apertura o cierre de manera abrupta (tipo escalón) durante los cambios de referencia. Esta estrategia contrasta con la respuesta típicamente continua y suave de los algoritmos PID, donde la señal de control varía gradualmente en función del error y sus derivadas.
+
+Llevar la señal de control a saturación máxima de forma brusca presenta varias ventajas en sistemas con dinámica lenta o alta inercia, como el control de nivel:
+
+\begin{itemize}
+    \item \textbf{Reducción del tiempo de establecimiento:} Al aplicar el máximo esfuerzo de control desde el inicio del cambio, el sistema responde más rápido y alcanza el nuevo setpoint en menor tiempo, minimizando el retardo inherente al proceso.
+    \item \textbf{Simplicidad de la acción de control:} La lógica difusa puede implementar reglas del tipo ``si el error es grande, entonces actuar al máximo'', lo que resulta en una acción directa y fácil de interpretar, especialmente útil cuando se prioriza la rapidez sobre la fineza en el control.
+    \item \textbf{Mejor manejo de grandes perturbaciones:} Ante cambios bruscos o perturbaciones importantes, la saturación inmediata permite contrarrestar rápidamente los efectos no deseados, evitando que el sistema permanezca mucho tiempo alejado del valor deseado.
+    \item \textbf{Menor sensibilidad a la sintonización:} A diferencia del PID, donde los parámetros deben ajustarse cuidadosamente para evitar sobreimpulsos u oscilaciones, la acción tipo escalón es menos dependiente de la sintonización fina y puede ser más robusta ante variaciones del proceso.
+\end{itemize}
+
+No obstante, esta estrategia también implica ciertos riesgos, como el posible desgaste prematuro de los actuadores o la generación de esfuerzos innecesarios si no se gestiona adecuadamente la transición a régimen estacionario. Por ello, es habitual que el controlador difuso combine la saturación inicial con una modulación posterior más suave, tal como se observa en los resultados experimentales.
+
+En comparación, los algoritmos PID tienden a variar la señal de control de manera continua y proporcional al error, lo que puede resultar en respuestas más suaves pero también en tiempos de establecimiento mayores, especialmente en procesos con alta inercia. La elección entre una acción de control brusca o suave debe basarse en las características del sistema y los objetivos de control prioritarios.

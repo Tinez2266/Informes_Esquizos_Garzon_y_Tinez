@@ -3,7 +3,7 @@
 
   // 📦 Compilación manual: en Live Share usa terminal compartida del host;
   // en local usa las mismas tareas de VS Code.
-  "latex-workshop.latex.autoBuild.run": "never",
+  "latex-workshop.latex.autoBuild.run": "onSave",
 
   // ⚙️ Herramientas de compilación y limpieza
   "latex-workshop.latex.tools": [

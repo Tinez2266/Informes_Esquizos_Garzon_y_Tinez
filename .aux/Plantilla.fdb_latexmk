@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1771948255.16011 "Plantilla.tex" "Plantilla.pdf" "Plantilla" 1771948256.92142 0
-  ".aux/Plantilla.aux" 1771948256 340 9018b05d12c8f14fa40925126c5b5e0d "pdflatex"
+["pdflatex"] 1772052219.5051 "Plantilla.tex" "Plantilla.pdf" "Plantilla" 1772052221.40293 0
+  ".aux/Plantilla.aux" 1772052221 429 5f2d1ed65ec02b2f1a293d4348190d8d "pdflatex"
   "C:/Users/Jon/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1765047587 136688 4dfe91c28eeb0bac513e8c0dbdaa0520 ""
   "C:/Users/Jon/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi525/ectt0800.pk" 1763899560 13416 f44a01ad9d2dc133957f79ad52b16daf ""
   "C:/Users/Jon/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/ecbx1000.pk" 1761324944 25420 59e4f79167906cb2521ef0eb71681969 ""
@@ -29,6 +29,7 @@
   "C:/Users/Jon/AppData/Local/Programs/MiKTeX/fonts/tfm/public/amsfonts/symbols/msbm10.tfm" 1233951854 908 2921f8a10601f252058503cc6570e581 ""
   "C:/Users/Jon/AppData/Local/Programs/MiKTeX/fonts/tfm/public/amsfonts/symbols/msbm5.tfm" 1233951854 940 75ac932a52f80982a9f8ea75d03a34cf ""
   "C:/Users/Jon/AppData/Local/Programs/MiKTeX/fonts/tfm/public/amsfonts/symbols/msbm7.tfm" 1233951854 940 228d6584342e91276bf566bcf9716b83 ""
+  "C:/Users/Jon/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb" 1247596667 36299 5f9df58c2139e7edcf37c8fca4bd384d ""
   "C:/Users/Jon/AppData/Local/Programs/MiKTeX/tex/context/base/mkii/supp-pdf.mkii" 1580390158 71627 94eb9990bed73c364d7f53f960cc8c5b ""
   "C:/Users/Jon/AppData/Local/Programs/MiKTeX/tex/generic/babel/babel.sty" 1761147669 145885 784cdd1ebbc3dbacabd5ee30707617a3 ""
   "C:/Users/Jon/AppData/Local/Programs/MiKTeX/tex/generic/babel/locale/es/babel-es.ini" 1761147672 4345 33a8cc6f0a7c6afcb84895b2c963a4e5 ""
@@ -191,15 +192,18 @@
   "C:/Users/Jon/AppData/Local/Programs/MiKTeX/tex/latex/translations/dicts/translations-basic-dictionary-spanish.trsl" 1644048522 5850 2ef40dd7b6b9ada125cd1d90b7f7b307 ""
   "C:/Users/Jon/AppData/Local/Programs/MiKTeX/tex/latex/translations/translations.sty" 1644048522 44247 2188b95d0ee74e31eca4d316263c58a7 ""
   "C:/Users/Jon/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty" 1729265222 55384 b454dec21c2d9f45ec0b793f0995b992 ""
-  "Plantilla.tex" 1771946775 3369 bdd6e7a27adffed29d5061e76942ab7a ""
+  "Plantilla.tex" 1772049566 3402 08a61a867b4b7a848b7d77f3a7f59a10 ""
   "capitulos/AnalisisControlador.tex" 1771948096 2130 25833a21ff9734bdea21a519a20c1872 ""
-  "capitulos/Conclusiones.tex" 1771947279 963 67dc17404040e39cfc01c97c362cade4 ""
+  "capitulos/Conclusiones.tex" 1772052218 1101 b774364d609f6a3ff79bdb804e28d798 ""
   "capitulos/DescripcionDelProceso.tex" 1771947290 4148 75207d9042078ed3bc0158d16ad052ca ""
   "capitulos/Modelo.tex" 1771948224 6053 8fbf7518f583c32d3bfb2ea8720df6d0 ""
+  "capitulos/Resultados.tex" 1772052036 5613 cb38f836a60392f9cc8da3b0c1ba7acb ""
   "capitulos/Resumen.tex" 1771947329 953 c1adfa72ce506d48ddcb533f10c8d644 ""
   "codigo/SimulateFuzzyInferenceSystemExample_clean.m" 1771947098 582 90d636bc77ead92a9cd18785e0a45dde ""
   "estilo.sty" 1764494787 6186 c55afd63cbcfe8d99348b63cb0e95d33 ""
   "fotos/Modelo.PNG" 1771946139 55082 381e2f0efa1a44e500370cbe5dbbbc3b ""
+  "fotos/grafica_control.jpeg" 1772050620 62950 235bc5121b742871beae292cd8ca5c91 ""
+  "fotos/grafica_salida.jpeg" 1772050596 51895 3223116d0f4e6b499db72bbbc823db5a ""
   (generated)
   ".aux/Plantilla.aux"
   ".aux/Plantilla.log"
